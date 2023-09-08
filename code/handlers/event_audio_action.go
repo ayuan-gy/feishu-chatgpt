@@ -37,7 +37,7 @@ func (*AudioAction) Execute(a *ActionInfo) bool {
 			*msgId).FileKey(fileKey).Type("file").Build()
 		resp, err := initialization.GetLarkClient().Im.MessageResource.Get(context.Background(), req)
 		//fmt.Println(resp, err)
-		logger.Debug(resp, err)
+		logger.Debug("resp", err)
 		if err != nil {
 			fmt.Println(err)
 			return true
