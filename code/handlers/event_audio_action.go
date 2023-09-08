@@ -29,12 +29,15 @@ func (*AudioAction) Execute(a *ActionInfo) bool {
 	if a.info.msgType == "audio" {
 		fileKey := a.info.fileKey
 		//fmt.Printf("fileKey: %s \n", fileKey)
+		logger.Debug("fileKey: %s \n", fileKey)
 		msgId := a.info.msgId
 		//fmt.Println("msgId: ", *msgId)
+		logger.Debug("msgId: ", *msgId)
 		req := larkim.NewGetMessageResourceReqBuilder().MessageId(
 			*msgId).FileKey(fileKey).Type("file").Build()
 		resp, err := initialization.GetLarkClient().Im.MessageResource.Get(context.Background(), req)
 		//fmt.Println(resp, err)
+		logger.Debug(resp, err)
 		if err != nil {
 			fmt.Println(err)
 			return true
@@ -44,12 +47,15 @@ func (*AudioAction) Execute(a *ActionInfo) bool {
 		defer os.Remove(f)
 
 		//fmt.Println("f: ", f)
+		
+		logger.Debug("f: ", f)
 		output := fmt.Sprintf("%s.mp3", fileKey)
 		// 等待转换完成
 		audio.OggToWavByPath(f, output)
 		defer os.Remove(output)
 		//fmt.Println("output: ", output)
 
+		logger.Debug("output: ", output)
 		text, err := a.handler.gpt.AudioToText(output)
 		if err != nil {
 			fmt.Println(err)
